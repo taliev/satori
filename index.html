@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SATOFI — Пространство тишины</title>
+    <!-- Preconnect для шрифтов Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Основные шрифты: Playfair Display для элегантности, Inter для читаемости, а для духовного акцента - легкий кириллический вариант -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #F9F6EF 0%, #EFE9E0 100%);
+            /* Атмосфера старой бумаги, теплого камня и песка */
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            color: #2C2B28;
+        }
+
+        /* Духовный фон: легкие абстрактные круги (мандала/луна) и тени */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ambient-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(210, 180, 140, 0.08) 0%, rgba(190, 160, 120, 0) 80%);
+            filter: blur(60px);
+        }
+
+        .circle-1 {
+            width: 70vw;
+            height: 70vw;
+            top: -20vh;
+            right: -20vw;
+        }
+
+        .circle-2 {
+            width: 50vw;
+            height: 50vw;
+            bottom: -10vh;
+            left: -15vw;
+            background: radial-gradient(circle, rgba(180, 150, 110, 0.1) 0%, rgba(150, 120, 80, 0) 80%);
+        }
+
+        .circle-3 {
+            width: 40vh;
+            height: 40vh;
+            top: 30%;
+            left: 15%;
+            background: radial-gradient(circle, rgba(230, 210, 170, 0.15) 0%, rgba(210, 180, 140, 0) 70%);
+            filter: blur(80px);
+        }
+
+        /* Основной контейнер с центрированием и духовным «алтарем» */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1280px;
+            margin: 2rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 90vh;
+            backdrop-filter: blur(2px);
+        }
+
+        /* Карточка — прозрачная, эфирная, напоминающая свиток */
+        .spiritual-card {
+            text-align: center;
+            background: rgba(255, 252, 245, 0.55);
+            backdrop-filter: blur(8px);
+            border-radius: 64px;
+            padding: 3rem 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 245, 0.6);
+            border: 1px solid rgba(230, 215, 185, 0.6);
+            transition: all 0.4s ease;
+            width: 100%;
+            max-width: 880px;
+        }
+
+        /* Декоративный элемент: маленькая чаша или бинди-точка сверху */
+        .dharma-marker {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #E4D5B6, #C9B586);
+            margin-bottom: 1.8rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05), inset 0 1px 2px rgba(255,255,200,0.8);
+            position: relative;
+        }
+        .dharma-marker::after {
+            content: "☸";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 20px;
+            color: #7A5A3A;
+            font-weight: 400;
+            text-shadow: 0 0 2px rgba(255,235,180,0.8);
+        }
+
+        /* Главное название сайта */
+        .site-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3.2rem, 12vw, 6.5rem);
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: #2A2418;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 12px rgba(140, 100, 60, 0.08);
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Тонкая линия под названием (как сутра) */
+        .sutra-line {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #CBB99A, #B5976E, #CBB99A, transparent);
+            margin: 1rem auto 2rem auto;
+            border-radius: 4px;
+        }
+
+        /* Главная фраза по середине */
+        .main-mantra {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 7vw, 4.2rem);
+            font-weight: 500;
+            color: #3E3524;
+            letter-spacing: 0.01em;
+            margin: 1.2rem 0 0.8rem 0;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #4B3E2C, #2E2A22);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: none;
+        }
+
+        /* Подпись: философ, антрополог и тд */
+        .subtitles {
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            color: #6E5C45;
+            text-transform: uppercase;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.6rem 1.6rem;
+            row-gap: 0.8rem;
+        }
+
+        .subtitles span {
+            background: rgba(235, 222, 198, 0.5);
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            font-weight: 300;
+        }
+
+        /* Визуальный разделитель - стилизованный "бесконечный узел" в виде линии */
+        .endless-knot {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 2rem 0 1rem;
+            opacity: 0.6;
+        }
+        .endless-knot span {
+            width: 6px;
+            height: 6px;
+            background-color: #B1926C;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .endless-knot span:nth-child(odd) {
+            width: 8px;
+            height: 8px;
+            background-color: #CDB38C;
+        }
+
+        /* Дополнительный текст - цитата или приветствие */
+        .spiritual-quote {
+            font-size: 0.9rem;
+            font-style: italic;
+            color: #7E6B50;
+            max-width: 500px;
+            margin: 2rem auto 0;
+            line-height: 1.6;
+            font-weight: 300;
+            border-top: 1px solid rgba(180, 150, 110, 0.3);
+            padding-top: 1.8rem;
+        }
+
+        /* Эффект при наведении на карточку - легкое свечение */
+        .spiritual-card:hover {
+            background: rgba(255, 252, 245, 0.7);
+            box-shadow: 0 30px 50px -20px rgba(60, 40, 20, 0.2);
+            border-color: rgba(210, 180, 130, 0.8);
+            transition: all 0.3s;
+        }
+
+        /* нижний колонтитул с мантрой */
+        .footer-note {
+            margin-top: 3rem;
+            font-size: 0.7rem;
+            text-align: center;
+            color: #A79173;
+            letter-spacing: 0.6px;
+            font-weight: 300;
+        }
+
+        /* Адаптивность и эстетика */
+        @media (max-width: 640px) {
+            .main-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            .spiritual-card {
+                padding: 2rem 1.5rem;
+                border-radius: 48px;
+            }
+            .subtitles span {
+                font-size: 0.7rem;
+                padding: 0.15rem 0.7rem;
+                letter-spacing: 0.1em;
+            }
+            .dharma-marker {
+                width: 32px;
+                height: 32px;
+            }
+            .dharma-marker::after {
+                font-size: 16px;
+            }
+        }
+
+        /* Тонкие анимации для спокойствия */
+        @keyframes gentleFloat {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-6px); }
+        }
+        .site-title, .main-mantra {
+            animation: gentleFloat 5s ease-in-out infinite alternate;
+        }
+        .site-title {
+            animation-delay: 0s;
+        }
+        .main-mantra {
+            animation-delay: 0.5s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient-bg">
+    <div class="ambient-circle circle-1"></div>
+    <div class="ambient-circle circle-2"></div>
+    <div class="ambient-circle circle-3"></div>
+</div>
+
+<div class="main-container">
+    <div class="spiritual-card">
+        <div class="dharma-marker"></div>
+
+        <h1 class="site-title">SATOFI</h1>
+        <div class="sutra-line"></div>
+
+        <div class="subtitles">
+            <span>ФИЛОСОФ</span>
+            <span>АНТРОПОЛОГ</span>
+            <span>МЫСЛИТЕЛЬ</span>
+            <span>ВИЗИОНЕР</span>
+        </div>
+        
+        <div class="endless-knot">
+            <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        
+        <div class="spiritual-quote">
+            ॐ मणिपद्मे हूँ · тишина за пределами слов · путь осознанности
+        </div>
+    </div>
+    <div class="footer-note">
+        · присутствие · сострадание · ясность ·
+    </div>
+</div>
+
+
+</body>
+</html>
